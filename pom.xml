@@ -343,7 +343,7 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>${javadoc.version}</version>
         <configuration>
-          <encode>${project.build.sourceEncoding}</encode>
+          <encoding>${project.build.sourceEncoding}</encoding>
         </configuration>
         <executions>	<!-- 进行执行配置 -->
           <execution>
@@ -361,7 +361,7 @@
         <configuration>
           <source>${jdk.version}</source>
           <target>${jdk.version}</target>
-          <encode>${project.build.sourceEncoding}</encode>
+          <encoding>${project.build.sourceEncoding}</encoding>
         </configuration>
       </plugin>
     </plugins>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+
+        <security:http auto-config="true">
+            <security:access-denied-handler error-page="/WEB-INF/pages/error_page_403.jsp" />
+            <security:intercept-url pattern="/pages/info/*" access="hasRole('ADMIN')" />
+            <!-- 采用http-basic模式进行登录 -->
+            <security:http-basic/>
+        </security:http>
+
+        <!--定义security认证管理器-->
+       <security:authentication-manager>
+           <!--定义认证管理配置类(信息提供者)-->
+           <security:authentication-provider>
+               <!--认证用户信息的创建-->
+               <security:user-service>
+                   <!--在进行角色信息定义的时候前面一定要加上'ROLE_'前缀-->
+                   <!--定义一个账户'admin / hello'，拥有的角色信息：ADMIN,USER-->
+                   <security:user name="admin" authorities="ROLE_ADMIN,ROLE_USER" password="{bcrypt}$2a$10$2y7higVhnHCn2L8//r/EVed2zi/LrQ.Y.svV.oeLqUM8xfUx5JWQC"/>
+                   <!--定义账户'macfu / java',角色: USER-->
+                   <security:user name="macfu" authorities="ROLE_USER" password="{bcrypt}$2a$10$vjXs780rO3rF8ZAXuBL4..c9icL4JDvr3sweCIU9y/QWiYlHgbKGa"/>
+               </security:user-service>
+           </security:authentication-provider>
+       </security:authentication-manager>
+</beans>
