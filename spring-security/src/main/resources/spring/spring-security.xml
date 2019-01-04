@@ -15,18 +15,31 @@
             <!--<security:http-basic/>-->
         </security:http>
 
-        <!--定义security认证管理器-->
-       <security:authentication-manager>
-           <!--定义认证管理配置类(信息提供者)-->
-           <security:authentication-provider>
-               <!--认证用户信息的创建-->
-               <security:user-service>
-                   <!--在进行角色信息定义的时候前面一定要加上'ROLE_'前缀-->
-                   <!--定义一个账户'admin / hello'，拥有的角色信息：ADMIN,USER-->
-                   <security:user name="admin" authorities="ROLE_ADMIN,ROLE_USER" password="{bcrypt}$2a$10$2y7higVhnHCn2L8//r/EVed2zi/LrQ.Y.svV.oeLqUM8xfUx5JWQC"/>
-                   <!--定义账户'macfu / java',角色: USER-->
-                   <security:user name="macfu" authorities="ROLE_USER" password="{bcrypt}$2a$10$vjXs780rO3rF8ZAXuBL4..c9icL4JDvr3sweCIU9y/QWiYlHgbKGa"/>
-               </security:user-service>
-           </security:authentication-provider>
-       </security:authentication-manager>
+        <!--&lt;!&ndash;定义security认证管理器&ndash;&gt;-->
+       <!--<security:authentication-manager>-->
+           <!--&lt;!&ndash;定义认证管理配置类(信息提供者)&ndash;&gt;-->
+           <!--<security:authentication-provider>-->
+               <!--&lt;!&ndash;认证用户信息的创建&ndash;&gt;-->
+               <!--<security:user-service>-->
+                   <!--&lt;!&ndash;在进行角色信息定义的时候前面一定要加上'ROLE_'前缀&ndash;&gt;-->
+                   <!--&lt;!&ndash;定义一个账户'admin / hello'，拥有的角色信息：ADMIN,USER&ndash;&gt;-->
+                   <!--<security:user name="admin" authorities="ROLE_ADMIN,ROLE_USER" password="{bcrypt}$2a$10$2y7higVhnHCn2L8//r/EVed2zi/LrQ.Y.svV.oeLqUM8xfUx5JWQC"/>-->
+                   <!--&lt;!&ndash;定义账户'macfu / java',角色: USER&ndash;&gt;-->
+                   <!--<security:user name="macfu" authorities="ROLE_USER" password="{bcrypt}$2a$10$vjXs780rO3rF8ZAXuBL4..c9icL4JDvr3sweCIU9y/QWiYlHgbKGa"/>-->
+               <!--</security:user-service>-->
+           <!--</security:authentication-provider>-->
+       <!--</security:authentication-manager>-->
+
+    <!--定义security认证管理器-->
+    <security:authentication-manager>
+        <!--定义认证管理配置类(信息提供者)-->
+        <security:authentication-provider>
+            <!-- 此时将通过jdbc进行用户认证与授权信息的获取 -->
+            <!-- 认证信息获取查询：user-by-username-query -->
+            <!-- 用户授权信息查询:authorities-by-username-query -->
+           <security:jdbc-user-service data-source-ref="datasource"
+                                       users-by-username-query="SELECT mid as username,password,enabled FROM member where mid=?"
+                                       authorities-by-username-query="SELECT mid as username,rid as authorities from member_role WHERE mid=?"/>
+        </security:authentication-provider>
+    </security:authentication-manager>
 </beans>
