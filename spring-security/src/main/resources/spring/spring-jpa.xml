@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+    <jpa:repositories base-package="com.macfu.dao"/>
+
+    <!-- 在整个配置文件定义之中最需要配置的就是EntityManagerFactory -->
+    <!-- spring工厂类 -->
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <!-- 定义要使用的数据源 -->
+        <property name="dataSource" ref="datasource"/>
+        <!-- jpa核心配置文件 -->
+        <property name="persistenceXmlLocation" value="classpath:META-INF/persistence.xml"/>
+        <!-- 定义持久化单元名称 -->
+        <property name="persistenceUnitName" value="mldnjava"/>
+        <!-- 定义po类的扫描包 -->
+        <property name="packagesToScan" value="com.macfu.po"/>
+        <!-- 定义持久化操作的提供类，使用Hibernate实现jpa -->
+        <property name="persistenceProvider" >
+            <bean class="org.hibernate.jpa.HibernatePersistenceProvider"/>
+        </property>
+        <!-- 定义jpa操作实现者 -->
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+        </property>
+        <!-- 定义jpa实现方言 -->
+        <property name="jpaDialect">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+        </property>
+    </bean>
+</beans>

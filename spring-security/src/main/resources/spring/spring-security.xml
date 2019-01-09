@@ -33,13 +33,14 @@
     <!--定义security认证管理器-->
     <security:authentication-manager>
         <!--定义认证管理配置类(信息提供者)-->
-        <security:authentication-provider>
-            <!-- 此时将通过jdbc进行用户认证与授权信息的获取 -->
-            <!-- 认证信息获取查询：user-by-username-query -->
-            <!-- 用户授权信息查询:authorities-by-username-query -->
-           <security:jdbc-user-service data-source-ref="datasource"
-                                       users-by-username-query="SELECT mid as username,password,enabled FROM member where mid=?"
-                                       authorities-by-username-query="SELECT mid as username,rid as authorities from member_role WHERE mid=?"/>
-        </security:authentication-provider>
+        <!--<security:authentication-provider>-->
+            <!--&lt;!&ndash; 此时将通过jdbc进行用户认证与授权信息的获取 &ndash;&gt;-->
+            <!--&lt;!&ndash; 认证信息获取查询：user-by-username-query &ndash;&gt;-->
+            <!--&lt;!&ndash; 用户授权信息查询:authorities-by-username-query &ndash;&gt;-->
+           <!--<security:jdbc-user-service data-source-ref="datasource"-->
+                                       <!--users-by-username-query="SELECT mid as username,password,enabled FROM member where mid=?"-->
+                                       <!--authorities-by-username-query="SELECT mid as username,rid as authorities from member_role WHERE mid=?"/>-->
+        <!--</security:authentication-provider>-->
+        <security:authentication-provider user-service-ref="userDetailsService"/>
     </security:authentication-manager>
 </beans>
