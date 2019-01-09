@@ -32,6 +32,7 @@
 
     <!-- 本次进行认证管理的操作全部采用自动完成的处理形式，用户不再关系具体的认证处理，全部由Spring提供 -->
     <security:http auto-config="false">	<!-- 启用HTTP访问认证 -->
+        <security:remember-me remember-me-parameter="remember" key="mldn-macfu" token-validity-seconds="259200" remember-me-cookie="mldn-remember-cookid" data-source-ref="datasources"/>
         <!-- 进行session管理器的配置，配置并发访问的问题，一旦出现了问题设置跳转页面 -->
         <security:session-management invalid-session-url="/loginPage.action">
             <security:concurrency-control max-sessions="1" error-if-maximum-exceeded="false" expired-url="/logoffPage.action"/>
