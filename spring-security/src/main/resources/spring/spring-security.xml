@@ -5,8 +5,37 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
 
+    <!--&lt;!&ndash; 本次进行认证管理的操作全部采用自动完成的处理形式，用户不再关系具体的认证处理，全部由Spring提供 &ndash;&gt;-->
+    <!--<security:http auto-config="true">	&lt;!&ndash; 启用HTTP访问认证 &ndash;&gt;-->
+        <!--&lt;!&ndash; 进行信息访问的时候如果发现授权出现了问题，禁止访问的时候配置的跳转路径 &ndash;&gt;-->
+        <!--<security:access-denied-handler error-page="/error_403.action"/>-->
+        <!--&lt;!&ndash; 定义需要进行拦截的访问路径，拥有“ADMIN角色”的账户可以访问 &ndash;&gt;-->
+        <!--<security:intercept-url pattern="/pages/info/**" access="hasRole('ADMIN')"/>-->
+        <!--<security:intercept-url pattern="/pages/message/**" access="hasRole('USER')"/>-->
+        <!--&lt;!&ndash; welcomePage.action是认证成功的欢迎页面，所以此路径必须认证后才可以访问 &ndash;&gt;-->
+        <!--<security:intercept-url pattern="/welcomePage.action" access="isAuthenticated()"/>-->
+        <!--<security:csrf disabled="true"/>-->
+        <!--&lt;!&ndash; 明确的进行登录的配置处理，定义参数、处理路径、成功或失败的跳转页面 &ndash;&gt;-->
+        <!--<security:form-login-->
+                <!--username-parameter="mid"-->
+                <!--password-parameter="pwd"-->
+                <!--authentication-success-forward-url="/welcomePage.action"-->
+                <!--login-page="/loginPage.action"-->
+                <!--login-processing-url="/mldn-login"-->
+                <!--authentication-failure-forward-url="/loginPage.action?error=true" />-->
+        <!--<security:logout-->
+                <!--logout-url="/mldn-logout"-->
+                <!--logout-success-url="/logoutPage.action"-->
+                <!--delete-cookies="JSESSIONID"/>-->
+    <!--</security:http>-->
+
+
     <!-- 本次进行认证管理的操作全部采用自动完成的处理形式，用户不再关系具体的认证处理，全部由Spring提供 -->
-    <security:http auto-config="true">	<!-- 启用HTTP访问认证 -->
+    <security:http auto-config="false">	<!-- 启用HTTP访问认证 -->
+        <!-- 进行session管理器的配置，配置并发访问的问题，一旦出现了问题设置跳转页面 -->
+        <security:session-management invalid-session-url="/loginPage.action">
+            <security:concurrency-control max-sessions="1" error-if-maximum-exceeded="false" expired-url="/logoffPage.action"/>
+        </security:session-management>
         <!-- 进行信息访问的时候如果发现授权出现了问题，禁止访问的时候配置的跳转路径 -->
         <security:access-denied-handler error-page="/error_403.action"/>
         <!-- 定义需要进行拦截的访问路径，拥有“ADMIN角色”的账户可以访问 -->
@@ -28,6 +57,7 @@
                 logout-success-url="/logoutPage.action"
                 delete-cookies="JSESSIONID"/>
     </security:http>
+
 
     <!--&lt;!&ndash;定义security认证管理器&ndash;&gt;-->
        <!--<security:authentication-manager>-->

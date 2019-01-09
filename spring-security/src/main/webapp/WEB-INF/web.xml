@@ -14,6 +14,11 @@
         </listener-class>
     </listener>
 
+    <!-- session管理 -->
+    <listener>
+        <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+    </listener>
+    
     <!-- 设置上下文参数，实际上就是设置application属性，等价与setAttribute()属性 -->
     <context-param>
         <param-name>contextConfigLocation</param-name>  <!-- Spring之中定义的属性名称-->
