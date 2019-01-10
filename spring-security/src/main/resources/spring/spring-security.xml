@@ -31,7 +31,7 @@
 
 
     <!-- 本次进行认证管理的操作全部采用自动完成的处理形式，用户不再关系具体的认证处理，全部由Spring提供 -->
-    <security:http auto-config="false">	<!-- 启用HTTP访问认证 -->
+    <security:http auto-config="false" entry-point-ref="authenticationEntryPoint" access-decision-manager-ref="accessDecisionManager">	<!-- 启用HTTP访问认证 -->
         <security:remember-me remember-me-parameter="remember" key="mldn-macfu" token-validity-seconds="259200" remember-me-cookie="mldn-remember-cookid" data-source-ref="datasources"/>
         <!-- 进行session管理器的配置，配置并发访问的问题，一旦出现了问题设置跳转页面 -->
         <security:session-management invalid-session-url="/loginPage.action">
@@ -41,7 +41,7 @@
         <security:access-denied-handler error-page="/error_403.action"/>
         <!-- 定义需要进行拦截的访问路径，拥有“ADMIN角色”的账户可以访问 -->
         <security:intercept-url pattern="/pages/info/**" access="hasRole('ADMIN')"/>
-        <security:intercept-url pattern="/pages/message/**" access="hasRole('USER')"/>
+        <security:intercept-url pattern="/pages/message/**" access="hasRole('USER') or hasRole('LOCAL_IP')"/>
         <!-- welcomePage.action是认证成功的欢迎页面，所以此路径必须认证后才可以访问 -->
         <security:intercept-url pattern="/welcomePage.action" access="isAuthenticated()"/>
         <security:csrf disabled="true"/>
@@ -88,4 +88,17 @@
         <!--</security:authentication-provider>-->
         <security:authentication-provider user-service-ref="userDetailsService"/>
     </security:authentication-manager>
+
+    <bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
+        <!-- 定义所有投票管理器 -->
+        <constructor-arg name="decisionVoters">
+            <list>
+                <bean class="org.springframework.security.access.vote.RoleVoter"/>
+                <bean class="org.springframework.security.access.vote.AuthenticatedVoter"/>
+                <bean class="com.macfu.config.IPAddressVoter"/>
+                <!-- 如果不使用以下的投票器，那么SpEL语法将无法正常解析-->
+                <bean class="org.springframework.security.web.access.expression.WebExpressionVoter"/>
+            </list>
+        </constructor-arg>
+    </bean>
 </beans>
